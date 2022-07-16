@@ -1,6 +1,7 @@
 #include <glad/glad.h>
 #include "SDL.h"
 #include "SDL_image.h"
+#include "Shader.h"
 #include <stdlib.h>
 #include <iostream>
 
@@ -20,47 +21,6 @@ static int resizingEventWatcher(void* data, SDL_Event* event) {
 		}
 	}
 	return 0;
-}
-
-static std::string OpenShader(const std::string& path)
-{
-	std::ifstream stream(path);
-
-	std::string line;
-	std::stringstream ss;
-
-	while (getline(stream, line))
-	{
-		ss << line << "\n";
-	}
-
-	return ss.str();
-}
-
-static unsigned int CompileShader(const std::string& source, unsigned int type)
-{
-	unsigned int id = glCreateShader(type);
-	const char* src = source.c_str();
-	glShaderSource(id, 1, &src, nullptr);
-	glCompileShader(id);
-
-	int result;
-	glGetShaderiv(id, GL_COMPILE_STATUS, &result);
-	if (result == GL_FALSE)
-	{
-		int length;
-		glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
-		char* message = (char*)alloca(length * sizeof(char));
-		glGetShaderInfoLog(id, length, &length, message);
-
-		std::cout << "Failed to compile Shader!" << std::endl;
-		std::cout << message << std::endl;
-
-		glDeleteShader(id);
-		return 0;
-	}
-
-	return id;
 }
 
 int main(int argc, char* argv[])
@@ -92,29 +52,14 @@ int main(int argc, char* argv[])
 	glViewport(0, 0, 1280, 720);
 
 	// Set up shader
-	unsigned int vertexShader;
-	vertexShader = glCreateShader(GL_VERTEX_SHADER);
-
-	std::string vertexShaderSource = OpenShader("shaders/basic.shader.vertex");
-	unsigned int vertexShaderID = CompileShader(vertexShaderSource, GL_VERTEX_SHADER);
-	std::string fragmentShaderSource = OpenShader("shaders/basic.shader.fragment");
-	unsigned int fragmentShaderID = CompileShader(fragmentShaderSource, GL_FRAGMENT_SHADER);
-
-	unsigned int program = glCreateProgram();
-	glAttachShader(program, vertexShaderID);
-	glAttachShader(program, fragmentShaderID);
-	glLinkProgram(program);
-	glValidateProgram(program);
-
-	glDeleteShader(vertexShaderID);
-	glDeleteShader(fragmentShaderID);
+	Shader basicShader("shaders/basic.shader.vertex", "shaders/basic.shader.fragment");
 
 	// Set vertex buffer attributes
 	float vertices[] = {
-	 0.5f,  0.5f, 0.0f,  // top right
-	 0.5f, -0.5f, 0.0f,  // bottom right
-	-0.5f, -0.5f, 0.0f,  // bottom left
-	-0.5f,  0.5f, 0.0f   // top left 
+	 0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f,  // top right
+	 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, // bottom right
+	-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, // bottom left
+	-0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 1.0f, // top left 
 	};
 	unsigned int indices[] = {  // note that we start from 0!
 		0, 1, 3,   // first triangle
@@ -138,10 +83,13 @@ int main(int argc, char* argv[])
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); 
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)12);
+	glEnableVertexAttribArray(1);
+
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); 
 
 	// -----------------------------------------------------------------------------
 	SDL_AddEventWatch(resizingEventWatcher, window);
@@ -151,8 +99,12 @@ int main(int argc, char* argv[])
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		glUseProgram(program);
+		basicShader.use();
 		glBindVertexArray(VAO);
+
+		float timeValue = SDL_GetTicks();
+		float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
+		basicShader.SetFloat3("ourColor", 0.0f, greenValue, 0.0f);
 
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
