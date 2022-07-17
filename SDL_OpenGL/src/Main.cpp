@@ -13,6 +13,68 @@
 #include <string>
 #include <sstream>
 
+void flip_surface(SDL_Surface* surface)
+{
+	SDL_LockSurface(surface);
+
+	int pitch = surface->pitch; // row size
+	char* temp = new char[pitch]; // intermediate buffer
+	char* pixels = (char*)surface->pixels;
+
+	for (int i = 0; i < surface->h / 2; ++i) {
+		// get pointers to the two rows to swap
+		char* row1 = pixels + i * pitch;
+		char* row2 = pixels + (surface->h - i - 1) * pitch;
+
+		// swap rows
+		memcpy(temp, row1, pitch);
+		memcpy(row1, row2, pitch);
+		memcpy(row2, temp, pitch);
+	}
+
+	delete[] temp;
+
+	SDL_UnlockSurface(surface);
+}
+
+static unsigned int LoadTextureOpenGL(std::string path)
+{
+	SDL_Surface* image = IMG_Load(path.c_str());
+
+	flip_surface(image);
+
+	unsigned int texture;
+	glGenTextures(1, &texture);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	const char* pixelF = SDL_GetPixelFormatName(image->format->format);
+	
+	std::string pixelFormat = pixelF;
+
+	GLuint flag;
+
+	if (pixelFormat == "SDL_PIXELFORMAT_RGB24") flag = GL_RGB;
+	else if (pixelFormat == "SDL_PIXELFORMAT_ABGR8888") flag = GL_RGBA;
+	else
+	{
+		std::cout << "ERROR Loading " << path << ". Pixel Format not supported" << std::endl;
+		return 0;
+	}
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->w, image->h, 0, flag, GL_UNSIGNED_BYTE, image->pixels);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	SDL_FreeSurface(image);
+
+	return texture;
+}
+
 void framebuffer_size_callback(SDL_Window* window, int width, int height);
 
 static int resizingEventWatcher(void* data, SDL_Event* event) {
@@ -122,22 +184,12 @@ int main(int argc, char* argv[])
 	}
 
 	// Image Loading using SDL_Image
+	unsigned int texture1 = LoadTextureOpenGL("images/containerTexture.jpg");
+	unsigned int texture2 = LoadTextureOpenGL("images/awesomefaceTexture.png");
 
-	SDL_Surface* image = IMG_Load("images/containerTexture.jpg");
-
-	unsigned int texture;
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->w, image->h, 0, GL_RGB, GL_UNSIGNED_BYTE, image->pixels);
-	glGenerateMipmap(GL_TEXTURE_2D);
-
-	SDL_FreeSurface(image);
+	basicShader.use(); // don't forget to activate the shader before setting uniforms!  
+	basicShader.setInt("texture1", 0);
+	basicShader.setInt("texture2", 1); 
 
 	while (appState)
 	{
@@ -147,7 +199,10 @@ int main(int argc, char* argv[])
 		basicShader.use();
 		glBindVertexArray(VAO);
 
-		glBindTexture(GL_TEXTURE_2D, texture);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture1);
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, texture2);
 
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
