@@ -92,7 +92,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)external\SDL\include;$(ProjectDir)external\SDL2_image\include;$(ProjectDir)external\glad\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)external\SDL\include;$(ProjectDir)external\SDL2_image\include;$(ProjectDir)external\glad\include;$(ProjectDir)external\glm</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -109,7 +109,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)external\SDL\include;$(ProjectDir)external\SDL2_image\include;$(ProjectDir)external\glad\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)external\SDL\include;$(ProjectDir)external\SDL2_image\include;$(ProjectDir)external\glad\include;$(ProjectDir)external\glm</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -149,11 +149,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\InputManager.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="vendor\glad.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Globals.h" />
+    <ClInclude Include="src\InputManager.h" />
     <ClInclude Include="src\Shader.h" />
     <ClInclude Include="src\stb_image.h" />
   </ItemGroup>

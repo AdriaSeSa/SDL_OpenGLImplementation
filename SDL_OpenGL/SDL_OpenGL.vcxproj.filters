@@ -4,9 +4,12 @@
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="vendor\glad.c" />
     <ClCompile Include="src\Shader.cpp" />
+    <ClCompile Include="src\InputManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Shader.h" />
     <ClInclude Include="src\stb_image.h" />
+    <ClInclude Include="src\InputManager.h" />
+    <ClInclude Include="src\Globals.h" />
   </ItemGroup>
 </Project>

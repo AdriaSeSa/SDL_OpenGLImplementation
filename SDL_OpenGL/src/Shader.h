@@ -25,6 +25,7 @@ public:
     void setFloat(const std::string& name, float value) const;
     void SetFloat3(const std::string& name, float v1, float v2, float v3) const;
     void SetFloat4(const std::string& name, float v1, float v2, float v3, float v4) const;
+    void SetMatFloat4v(const std::string& name, const GLfloat* value);
 };
 
 #endif

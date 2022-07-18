@@ -13,6 +13,22 @@
 #include <string>
 #include <sstream>
 
+#include <glm.hpp>
+#include <gtc/matrix_transform.hpp>
+#include <gtc/type_ptr.hpp>
+
+#include "Globals.h"
+#include "InputManager.h"
+
+int screenWidth = 1280;
+int screenHeight = 720;
+
+InputManager input;
+
+glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
+glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+
 void flip_surface(SDL_Surface* surface)
 {
 	SDL_LockSurface(surface);
@@ -77,6 +93,19 @@ static unsigned int LoadTextureOpenGL(std::string path)
 
 void framebuffer_size_callback(SDL_Window* window, int width, int height);
 
+void ProcessInput()
+{
+	const float cameraSpeed = 0.05f; // adjust accordingly
+	if (input.GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
+		cameraPos += cameraSpeed * cameraFront;
+	if (input.GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
+		cameraPos -= cameraSpeed * cameraFront;
+	if (input.GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
+		cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+	if (input.GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+		cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+}
+
 static int resizingEventWatcher(void* data, SDL_Event* event) {
 	if (event->type == SDL_WINDOWEVENT &&
 		event->window.event == SDL_WINDOWEVENT_RESIZED) {
@@ -104,7 +133,8 @@ int main(int argc, char* argv[])
 	flags |= SDL_WINDOW_RESIZABLE;
 	flags |= SDL_WINDOW_OPENGL;
 
-	SDL_Window* window = SDL_CreateWindow("OpenGL Implementation by Adria Sellares", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1280, 720, flags);
+	SDL_Window* window = SDL_CreateWindow("OpenGL Implementation by Adria Sellares", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 
+											screenWidth, screenHeight, flags);
 	windowSurface = SDL_GetWindowSurface(window);
 
 	glContext = SDL_GL_CreateContext(window);
@@ -114,8 +144,19 @@ int main(int argc, char* argv[])
 		std::cout << "Failed to initialize GLAD" << std::endl;
 		return -1;
 	}
+
 	// OpenGl code --------------------------------------------
 	glViewport(0, 0, 1280, 720);
+	glEnable(GL_DEPTH_TEST);
+
+	// MVP set up
+	glm::mat4 model = glm::mat4(1.0f);
+	model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+
+	glm::mat4 projection;
+	projection = glm::perspective(glm::radians(45.0f), 1280.0f / 720.0f, 0.1f, 100.0f);
+
+	glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 
 	// Set up shader
 	Shader basicShader("shaders/basic.shader.vertex", "shaders/basic.shader.fragment");
@@ -127,6 +168,64 @@ int main(int argc, char* argv[])
 	-0.5f, -0.5f, 0.0f,		0.0f, 0.0f, 1.0f,	0.0f, 0.0f,// bottom left
 	-0.5f,  0.5f, 0.0f,		1.0f, 0.0f, 1.0f,	0.0f, 1.0f,// top left 
 	};
+
+	float vertices2[] = {
+	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+	 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+	-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+
+	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	 0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+
+	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+	};
+
+	glm::vec3 cubePositions[] = {
+	glm::vec3(0.0f,  0.0f,  0.0f),
+	glm::vec3(2.0f,  5.0f, -15.0f),
+	glm::vec3(-1.5f, -2.2f, -2.5f),
+	glm::vec3(-3.8f, -2.0f, -12.3f),
+	glm::vec3(2.4f, -0.4f, -3.5f),
+	glm::vec3(-1.7f,  3.0f, -7.5f),
+	glm::vec3(1.3f, -2.0f, -2.5f),
+	glm::vec3(1.5f,  2.0f, -2.5f),
+	glm::vec3(1.5f,  0.2f, -1.5f),
+	glm::vec3(-1.3f,  1.0f, -1.5f)
+	};
+
 	unsigned int indices[] = {  // note that we start from 0!
 		0, 1, 3,   // first triangle
 		1, 2, 3    // second triangle
@@ -141,7 +240,7 @@ int main(int argc, char* argv[])
 	glGenBuffers(1, &VBO);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_STATIC_DRAW);
 
 	unsigned int EBO;
 	glGenBuffers(1, &EBO);
@@ -149,14 +248,14 @@ int main(int argc, char* argv[])
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)12);
-	glEnableVertexAttribArray(1);
+	/*glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)12);
+	glEnableVertexAttribArray(1);*/
 
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)24);
-	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)12);
+	glEnableVertexAttribArray(1);
 
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); 
 
@@ -191,20 +290,44 @@ int main(int argc, char* argv[])
 	basicShader.setInt("texture1", 0);
 	basicShader.setInt("texture2", 1); 
 
+	basicShader.SetMatFloat4v("model", glm::value_ptr(model));
+	basicShader.SetMatFloat4v("view", glm::value_ptr(view));
+	basicShader.SetMatFloat4v("projection", glm::value_ptr(projection));
+
+
 	while (appState)
 	{
+		input.UpdateInput();
+		ProcessInput();
+
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		basicShader.use();
 		glBindVertexArray(VAO);
+
+		view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+		basicShader.SetMatFloat4v("view", glm::value_ptr(view));
+
+		for (unsigned int i = 0; i < 10; i++)
+		{
+			glm::mat4 model = glm::mat4(1.0f);
+			model = glm::translate(model, cubePositions[i]);
+			float angle = 20.0f * i;
+			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+			basicShader.SetMatFloat4v("model", glm::value_ptr(model));
+
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+		}
 
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, texture1);
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, texture2);
 
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+		glDrawArrays(GL_TRIANGLES, 0, 36);
 
 		glBindVertexArray(0);
 
@@ -228,5 +351,7 @@ int main(int argc, char* argv[])
 
 void framebuffer_size_callback(SDL_Window* window, int width, int height)
 {
+	screenWidth = width;
+	screenHeight = height;
 	glViewport(0, 0, width, height);
 }
