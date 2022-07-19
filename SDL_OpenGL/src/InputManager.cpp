@@ -4,6 +4,8 @@
 
 #include <string.h>
 
+InputManager* InputManager::instance = nullptr;	
+
 InputManager::InputManager()
 {
 	keyboard = new KEY_STATE[MAX_KEYS];
@@ -14,6 +16,21 @@ InputManager::InputManager()
 InputManager::~InputManager()
 {
 	delete[] keyboard;
+}
+
+InputManager* InputManager::GetInstance()
+{
+	if (instance == nullptr)
+	{
+		instance = new InputManager();
+	}
+	return instance;
+}
+
+void InputManager::ReleaseInstance()
+{
+	delete instance;
+	instance = nullptr;
 }
 
 void InputManager::UpdateInput()
@@ -41,8 +58,6 @@ void InputManager::UpdateInput()
 	}
 
 	Uint32 buttons = SDL_GetMouseState(&mouse_x, &mouse_y);
-	mouse_x /= 1280;
-	mouse_y /= 720;
 
 	for (int i = 0; i < MAX_MOUSE_BUTTONS; ++i)
 	{

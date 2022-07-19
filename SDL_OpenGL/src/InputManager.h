@@ -11,14 +11,13 @@ enum KEY_STATE
 	KEY_ERROR
 };
 
-
-
 class InputManager
 {
 public:
-	InputManager();
 
-	~InputManager();
+	static InputManager* GetInstance();
+
+	static void ReleaseInstance();
 
 	void UpdateInput();
 
@@ -31,11 +30,22 @@ public:
 	{
 		return (id < MAX_MOUSE_BUTTONS) ? mouse_buttons[id] : KEY_ERROR;
 	}
+private:
+	InputManager();
+
+	~InputManager();
+
+	static InputManager* instance;
+
+public:
+
+	int mouse_x = 0;
+	int mouse_y = 0;
+
+	int mouse_wheel_y = 0;
 
 private:
 	KEY_STATE* keyboard = nullptr;
 	KEY_STATE mouse_buttons[MAX_MOUSE_BUTTONS] = { KEY_STATE::KEY_DOWN };
-	int mouse_x = 0;
-	int mouse_y = 0;
 };
 

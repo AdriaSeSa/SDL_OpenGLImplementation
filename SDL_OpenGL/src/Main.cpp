@@ -19,15 +19,16 @@
 
 #include "Globals.h"
 #include "InputManager.h"
+#include "Camera.h"
 
 int screenWidth = 1280;
 int screenHeight = 720;
 
-InputManager input;
+bool appState = true;
 
-glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
-glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
-glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+InputManager* input;
+
+SDL_Window* window;
 
 void flip_surface(SDL_Surface* surface)
 {
@@ -95,15 +96,8 @@ void framebuffer_size_callback(SDL_Window* window, int width, int height);
 
 void ProcessInput()
 {
-	const float cameraSpeed = 0.05f; // adjust accordingly
-	if (input.GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
-		cameraPos += cameraSpeed * cameraFront;
-	if (input.GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
-		cameraPos -= cameraSpeed * cameraFront;
-	if (input.GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
-		cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
-	if (input.GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
-		cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+	if (input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
+		appState = false;
 }
 
 static int resizingEventWatcher(void* data, SDL_Event* event) {
@@ -120,8 +114,6 @@ static int resizingEventWatcher(void* data, SDL_Event* event) {
 
 int main(int argc, char* argv[])
 {
-	bool appState = true;
-
 	SDL_GLContext glContext;
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
@@ -133,7 +125,7 @@ int main(int argc, char* argv[])
 	flags |= SDL_WINDOW_RESIZABLE;
 	flags |= SDL_WINDOW_OPENGL;
 
-	SDL_Window* window = SDL_CreateWindow("OpenGL Implementation by Adria Sellares", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 
+	window = SDL_CreateWindow("OpenGL Implementation by Adria Sellares", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 
 											screenWidth, screenHeight, flags);
 	windowSurface = SDL_GetWindowSurface(window);
 
@@ -145,18 +137,27 @@ int main(int argc, char* argv[])
 		return -1;
 	}
 
+	SDL_ShowCursor(0);
+	SDL_CaptureMouse(SDL_FALSE);
+
 	// OpenGl code --------------------------------------------
 	glViewport(0, 0, 1280, 720);
 	glEnable(GL_DEPTH_TEST);
+
+	input = InputManager::GetInstance();
+
+	// Camera Set Up
+
+	Camera cam;
 
 	// MVP set up
 	glm::mat4 model = glm::mat4(1.0f);
 	model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 
 	glm::mat4 projection;
-	projection = glm::perspective(glm::radians(45.0f), 1280.0f / 720.0f, 0.1f, 100.0f);
+	projection = glm::perspective(glm::radians(cam.fov), 1280.0f / 720.0f, 0.1f, 100.0f);
 
-	glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+	glm::mat4 view = glm::lookAt(cam.cameraPos, cam.cameraPos + cam.cameraFront, cam.cameraUp);
 
 	// Set up shader
 	Shader basicShader("shaders/basic.shader.vertex", "shaders/basic.shader.fragment");
@@ -297,8 +298,17 @@ int main(int argc, char* argv[])
 
 	while (appState)
 	{
-		input.UpdateInput();
+		input->UpdateInput();
 		ProcessInput();
+		
+		cam.UpdateCamera();
+		SDL_WarpMouseInWindow(window, screenWidth / 2, screenHeight / 2);
+
+		cam.lastMouseX = screenWidth / 2;
+		cam.lastMouseY = screenHeight / 2;
+
+		projection = glm::perspective(glm::radians(cam.fov), (float)screenWidth / (float)screenHeight, 0.1f, 100.0f);
+		basicShader.SetMatFloat4v("projection", glm::value_ptr(projection));
 
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -306,7 +316,7 @@ int main(int argc, char* argv[])
 		basicShader.use();
 		glBindVertexArray(VAO);
 
-		view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+		view = cam.GetLookAt();
 		basicShader.SetMatFloat4v("view", glm::value_ptr(view));
 
 		for (unsigned int i = 0; i < 10; i++)
@@ -331,6 +341,8 @@ int main(int argc, char* argv[])
 
 		glBindVertexArray(0);
 
+		input->mouse_wheel_y = 0;
+
 		SDL_Event event;
 		while (SDL_PollEvent(&event) != 0)
 		{
@@ -338,6 +350,9 @@ int main(int argc, char* argv[])
 			{
 			case(SDL_QUIT):
 				appState = false;
+				break;
+			case(SDL_MOUSEWHEEL):
+				input->mouse_wheel_y = event.wheel.y;
 				break;
 			}
 		}
