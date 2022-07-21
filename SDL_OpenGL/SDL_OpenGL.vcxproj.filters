@@ -8,6 +8,7 @@
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\BaseScene.cpp" />
+    <ClCompile Include="src\LightingScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Shader.h" />
@@ -18,5 +19,6 @@
     <ClInclude Include="src\Scene.h" />
     <ClInclude Include="src\BaseScene.h" />
     <ClInclude Include="src\TextureLoad.h" />
+    <ClInclude Include="src\LightingScene.h" />
   </ItemGroup>
 </Project>

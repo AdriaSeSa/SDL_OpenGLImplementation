@@ -10,7 +10,7 @@
 #include "SDL.h"
 #include "SDL_image.h"
 
-void flip_surface(SDL_Surface* surface)
+static void flip_surface(SDL_Surface* surface)
 {
 	SDL_LockSurface(surface);
 

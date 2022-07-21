@@ -22,6 +22,7 @@
 #include "Camera.h"
 
 #include "BaseScene.h"
+#include "LightingScene.h"
 
 int screenWidth = 1280;
 int screenHeight = 720;
@@ -31,9 +32,6 @@ bool appState = true;
 InputManager* input;
 
 SDL_Window* window;
-
-unsigned int VAO2;
-unsigned int VBO2;
 
 float vertices[] = {
 	 0.5f,  0.5f, 0.0f,		1.0f, 0.0f, 0.0f,	1.0f, 1.0f,  // top right
@@ -99,13 +97,15 @@ int main(int argc, char* argv[])
 	glEnable(GL_DEPTH_TEST);
 
 	BaseScene baseScene;
+	LightingScene lightingScene;
+
+	Scene currentScene = lightingScene;
+
 
 	input = InputManager::GetInstance();
 
 	// Camera Set Up
 	Camera* cam = Camera::GetInstance();
-
-	Shader lightingShader("shaders/light.shader.vertex", "shaders/light.shader.fragment");
 
 	// -----------------------------------------------------------------------------
 	SDL_AddEventWatch(resizingEventWatcher, window);
@@ -130,13 +130,7 @@ int main(int argc, char* argv[])
 		stbi_image_free(data);*/
 	}
 
-	// Image Loading using SDL_Image
-	
-
 	// Light Set up
-
-	lightingShader.SetFloat3("objectColor", 1.0f, 0.5f, 0.31f);
-	lightingShader.SetFloat3("lightColor", 1.0f, 1.0f, 1.0f);
 
 	while (appState)
 	{
@@ -145,24 +139,10 @@ int main(int argc, char* argv[])
 		cam->UpdateCamera();
 		SDL_WarpMouseInWindow(window, screenWidth / 2, screenHeight / 2);
 
-		baseScene.Update();
+		lightingScene.Update();
 
 		ProcessInput();
 		
-
-		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-		//glDrawArrays(GL_TRIANGLES, 0, 36);
-
-		glBindVertexArray(VAO2);
-
-		//lightingShader.use();	
-
-		//lightingShader.SetMatFloat4v("projection", glm::value_ptr(projection));
-		//lightingShader.SetMatFloat4v("view", glm::value_ptr(view));
-
-		glDrawArrays(GL_TRIANGLES, 0, 36);
-
 		input->mouse_wheel_y = 0;
 
 		SDL_Event event;

@@ -85,7 +85,6 @@ BaseScene::BaseScene()
 	model = glm::mat4(1.0f);
 	model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 
-	projection;
 	projection = glm::perspective(glm::radians(cam->fov), 1280.0f / 720.0f, 0.1f, 100.0f);
 
 	view = glm::lookAt(cam->cameraPos, cam->cameraPos + cam->cameraFront, cam->cameraUp);
@@ -118,7 +117,6 @@ void BaseScene::Update()
 	glBindTexture(GL_TEXTURE_2D, texture1);
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, texture2);
-
 
 	projection = glm::perspective(glm::radians(cam->fov), (float)1280 / (float)720, 0.1f, 100.0f);
 	view = cam->GetLookAt();
