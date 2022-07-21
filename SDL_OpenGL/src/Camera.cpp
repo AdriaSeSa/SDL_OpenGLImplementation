@@ -2,9 +2,29 @@
 #include "InputManager.h"
 #include "SDL.h"
 
+Camera* Camera::instance = nullptr;
+
 Camera::Camera()
 {
 	input = InputManager::GetInstance();
+}
+
+Camera* Camera::GetInstance()
+{
+	if (instance == nullptr)
+	{
+		instance = new Camera();
+	}
+	return instance;
+}
+
+void Camera::FreeInstance()
+{
+	if (instance != nullptr)
+	{
+		delete instance;
+		instance = nullptr;
+	}
 }
 
 void Camera::UpdateCamera()
@@ -60,4 +80,7 @@ void Camera::UpdateCameraInput()
 		fov = 1.0f;
 	if (fov > 90.0f)
 		fov = 90.0f;
+
+	lastMouseX = 1280 / 2;
+	lastMouseY = 720 / 2;
 }

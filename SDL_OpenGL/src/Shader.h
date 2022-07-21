@@ -16,7 +16,12 @@ public:
     unsigned int programID;
 
     // constructor reads and builds the shader
+    Shader();
     Shader(const char* vertexPath, const char* fragmentPath);
+
+    // Create Shader
+    void CreateShader(const char* vertexPath, const char* fragmentPath);
+
     // use/activate the shader
     void use();
     // utility uniform functions
@@ -26,6 +31,7 @@ public:
     void SetFloat3(const std::string& name, float v1, float v2, float v3) const;
     void SetFloat4(const std::string& name, float v1, float v2, float v3, float v4) const;
     void SetMatFloat4v(const std::string& name, const GLfloat* value);
+    
 };
 
 #endif

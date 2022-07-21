@@ -9,13 +9,17 @@ class InputManager;
 class Camera
 {
 public:
-	Camera();
+
+	static Camera* GetInstance();
+
+	static void FreeInstance();
 
 	void UpdateCamera();
 
 	glm::mat4 GetLookAt();
 	
 private:
+	Camera();
 	void UpdateCameraInput();
 
 public:
@@ -29,6 +33,8 @@ public:
 	float lastMouseX;
 	float lastMouseY;
 private:
+
+	static Camera* instance;
 
 	glm::vec3 direction;
 

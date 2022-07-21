@@ -41,7 +41,16 @@ static unsigned int CompileShader(const std::string& source, unsigned int type)
 	return id;
 }
 
+Shader::Shader()
+{
+}
+
 Shader::Shader(const char* vertexPath, const char* fragmentPath)
+{
+	CreateShader(vertexPath, fragmentPath);
+}
+
+void Shader::CreateShader(const char* vertexPath, const char* fragmentPath)
 {
 	std::string vertexSource = OpenShader(vertexPath);
 	std::string fragmentSource = OpenShader(fragmentPath);
