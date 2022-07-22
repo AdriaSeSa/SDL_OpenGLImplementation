@@ -2,47 +2,47 @@
 #include "TextureLoad.h"
 
 float vertices3[] = {
--0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
- 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
- 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
- 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
--0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
--0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+	 0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+	 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+	 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+	-0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
 
--0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
- 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
- 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
- 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
--0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
--0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+	 0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+	 0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+	 0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+	-0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
 
--0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
--0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
--0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
--0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
--0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
--0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+	-0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+	-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+	-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+	-0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+	-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
 
- 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
- 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
- 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
- 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
- 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
- 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+	 0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+	 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+	 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+	 0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
 
--0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
- 0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
- 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
- 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
--0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
--0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+	 0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+	 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+	 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
 
--0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
- 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
- 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
- 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
--0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
--0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+	-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+	 0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+	 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+	 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+	-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+	-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
 };
 
 LightingScene::LightingScene()
@@ -103,15 +103,17 @@ void LightingScene::Update()
 	lightingShader.use();
 	glBindVertexArray(VAO);
 
+	glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
+
 	lightingShader.SetMatFloat4v("projection", glm::value_ptr(projection));
 	lightingShader.SetMatFloat4v("view", glm::value_ptr(view));
+	lightingShader.SetFloat3("lightPos", lightPos.x, lightPos.y, lightPos.z);
+	lightingShader.SetFloat3("viewPos", cam->cameraPos.x, cam->cameraPos.y, cam->cameraPos.z);
 
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 
 	lightCubeShader.use();
 	glBindVertexArray(lightVAO);
-
-	glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 
 	glm::mat4 model2 = glm::mat4(1.0f);
 	model2 = glm::translate(model2, lightPos);
@@ -136,10 +138,10 @@ void LightingScene::VertexBufferArraySetUp()
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices3), vertices3, GL_STATIC_DRAW);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)12);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)12);
 	glEnableVertexAttribArray(1);
 
 	//-------------------------------------------------
@@ -152,9 +154,6 @@ void LightingScene::VertexBufferArraySetUp()
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices3), vertices3, GL_STATIC_DRAW);
 
 	// set the vertex attribute 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
-
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)12);
-	glEnableVertexAttribArray(1);
 }
