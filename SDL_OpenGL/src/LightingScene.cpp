@@ -2,47 +2,48 @@
 #include "TextureLoad.h"
 
 float vertices3[] = {
-	-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-	 0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-	 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-	 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-	-0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+	// positions          // normals           // texture coords
+   -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
+	0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 0.0f,
+	0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
+	0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
+   -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 1.0f,
+   -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
 
-	-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-	 0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-	 0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-	 0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-	-0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+   -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 0.0f,
+	0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   1.0f, 0.0f,
+	0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   1.0f, 1.0f,
+	0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   1.0f, 1.0f,
+   -0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 1.0f,
+   -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 0.0f,
 
-	-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-	-0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-	-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-	-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-	-0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-	-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+   -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+   -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
+   -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+   -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+   -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
+   -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
 
-	 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-	 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-	 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-	 0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+	0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+	0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
+	0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+	0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+	0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
+	0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
 
-	-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-	 0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-	 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-	 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+   -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
+	0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 1.0f,
+	0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
+	0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
+   -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 0.0f,
+   -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
 
-	-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
-	 0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
-	 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-	 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-	-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-	-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
+   -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
+	0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 1.0f,
+	0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
+	0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
+   -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f,
+   -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
 };
 
 LightingScene::LightingScene()
@@ -58,18 +59,8 @@ LightingScene::LightingScene()
 
 	view = glm::lookAt(cam->cameraPos, cam->cameraPos + cam->cameraFront, cam->cameraUp);
 
-	basicShader.CreateShader("shaders/basic.shader.vertex", "shaders/basic.shader.fragment");
-
-	basicShader.use(); // don't forget to activate the shader before setting uniforms!  
-	basicShader.setInt("texture1", 0);
-	basicShader.setInt("texture2", 1);
-
-	basicShader.SetMatFloat4v("model", glm::value_ptr(model));
-	basicShader.SetMatFloat4v("view", glm::value_ptr(view));
-	basicShader.SetMatFloat4v("projection", glm::value_ptr(projection));
-
-	texture1 = LoadTextureOpenGL("images/containerTexture.jpg");
-	texture2 = LoadTextureOpenGL("images/awesomefaceTexture.png");
+	diffuseMap = LoadTextureOpenGL("images/containerTexture2.png");
+	specularMap = LoadTextureOpenGL("images/container2_specularTexture.png");
 
 	lightingShader.CreateShader("shaders/light.shader.vertex", "shaders/light.shader.fragment");
 	lightingShader.use();
@@ -79,8 +70,8 @@ LightingScene::LightingScene()
 	lightingShader.SetMatFloat4v("projection", glm::value_ptr(projection));
 
 	lightingShader.SetFloat3("material.ambient", 1.0f, 0.5f, 0.31f);	// Material ambient component
-	lightingShader.SetFloat3("material.diffuse", 1.0f, 0.5f, 0.31f);	// Material diffuse component
-	lightingShader.SetFloat3("material.specular", 0.5f, 0.5f, 0.5f);	// Material specular component
+	lightingShader.setInt("material.diffuse", 0);						// Material diffuse component set by map (0  is texture slot)
+	lightingShader.setInt("material.specular", 1);						// Material specular component set by map (1  is texture slot)
 	lightingShader.setFloat("material.shininess", 32.0f);				// Material shininess component
 
 	lightingShader.SetFloat3("light.ambient", 0.2f, 0.2f, 0.2f);		// Light ambient component
@@ -92,6 +83,7 @@ LightingScene::LightingScene()
 	lightCubeShader.SetMatFloat4v("model", glm::value_ptr(model));
 	lightCubeShader.SetMatFloat4v("view", glm::value_ptr(view));
 	lightCubeShader.SetMatFloat4v("projection", glm::value_ptr(projection));
+	lightCubeShader.SetFloat3("lightColor", 1.0f, 1.0f, 1.0f);
 
 }
 
@@ -101,6 +93,11 @@ LightingScene::~LightingScene()
 
 void LightingScene::Update()
 {
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, diffuseMap);
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, specularMap);
+
 	projection = glm::perspective(glm::radians(cam->fov), (float)1280 / (float)720, 0.1f, 100.0f);
 	view = cam->GetLookAt();
 
@@ -115,13 +112,24 @@ void LightingScene::Update()
 	lightingShader.SetMatFloat4v("projection", glm::value_ptr(projection));
 	lightingShader.SetMatFloat4v("view", glm::value_ptr(view));
 	lightingShader.SetFloat3("viewPos", cam->cameraPos.x, cam->cameraPos.y, cam->cameraPos.z);	// Camera position
-	lightingShader.SetFloat3("light.position", lightPos.x, lightPos.y, lightPos.z);		// Light specular component
+	lightingShader.SetFloat3("light.position", lightPos.x, lightPos.y, lightPos.z);		// Light position component
 
-	
+	/*glm::vec3 lightColor;
+	lightColor.x = sin((SDL_GetTicks()/1000.0f) * 2.0f);
+	lightColor.y = sin((SDL_GetTicks() / 1000.0f) * 0.7f);
+	lightColor.z = sin((SDL_GetTicks() / 1000.0f) * 1.3f);
+
+	glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f);
+	glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f);
+
+	lightingShader.SetFloat3("light.ambient", lightColor.x, lightColor.y, lightColor.z);
+	lightingShader.SetFloat3("light.diffuse", diffuseColor.x, diffuseColor.y, diffuseColor.z);*/
 
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 
 	lightCubeShader.use();
+	//lightCubeShader.SetFloat3("lightColor", lightColor.x, lightColor.y, lightColor.z);
+
 	glBindVertexArray(lightVAO);
 
 	glm::mat4 model2 = glm::mat4(1.0f);
@@ -147,11 +155,15 @@ void LightingScene::VertexBufferArraySetUp()
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices3), vertices3, GL_STATIC_DRAW);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)12);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)12);
 	glEnableVertexAttribArray(1);
+
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)24);
+	glEnableVertexAttribArray(2);
+
 
 	//-------------------------------------------------
 	glGenVertexArrays(1, &lightVAO);
@@ -163,6 +175,6 @@ void LightingScene::VertexBufferArraySetUp()
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices3), vertices3, GL_STATIC_DRAW);
 
 	// set the vertex attribute 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 }

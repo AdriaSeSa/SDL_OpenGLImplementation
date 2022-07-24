@@ -28,8 +28,8 @@ private:
 	unsigned int VBO;
 	unsigned int lightVBO;
 
-	unsigned int texture1;
-	unsigned int texture2;
+	unsigned int diffuseMap;
+	unsigned int specularMap;
 
 	InputManager* input;
 
