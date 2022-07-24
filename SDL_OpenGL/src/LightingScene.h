@@ -41,5 +41,6 @@ private:
 	Shader lightingShader;
 	Shader basicShader;
 	Shader lightCubeShader;
+	Shader spotLightShader;
 };
 
