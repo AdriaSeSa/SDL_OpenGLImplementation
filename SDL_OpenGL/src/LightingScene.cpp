@@ -73,12 +73,19 @@ LightingScene::LightingScene()
 
 	lightingShader.CreateShader("shaders/light.shader.vertex", "shaders/light.shader.fragment");
 	lightingShader.use();
-	lightingShader.SetFloat3("objectColor", 1.0f, 0.5f, 0.31f);
-	lightingShader.SetFloat3("lightColor", 1.0f, 1.0f, 1.0f);
 
 	lightingShader.SetMatFloat4v("model", glm::value_ptr(model));
 	lightingShader.SetMatFloat4v("view", glm::value_ptr(view));
 	lightingShader.SetMatFloat4v("projection", glm::value_ptr(projection));
+
+	lightingShader.SetFloat3("material.ambient", 1.0f, 0.5f, 0.31f);	// Material ambient component
+	lightingShader.SetFloat3("material.diffuse", 1.0f, 0.5f, 0.31f);	// Material diffuse component
+	lightingShader.SetFloat3("material.specular", 0.5f, 0.5f, 0.5f);	// Material specular component
+	lightingShader.setFloat("material.shininess", 32.0f);				// Material shininess component
+
+	lightingShader.SetFloat3("light.ambient", 0.2f, 0.2f, 0.2f);		// Light ambient component
+	lightingShader.SetFloat3("light.diffuse", 0.5f, 0.5f, 0.5f);		// Light diffuse component
+	lightingShader.SetFloat3("light.specular", 1.0f, 1.0f, 1.0f);		// Light specular component
 
 	lightCubeShader.CreateShader("shaders/light.shader.vertex", "shaders/lightCube.shader.fragment");
 	lightCubeShader.use();
@@ -107,8 +114,10 @@ void LightingScene::Update()
 
 	lightingShader.SetMatFloat4v("projection", glm::value_ptr(projection));
 	lightingShader.SetMatFloat4v("view", glm::value_ptr(view));
-	lightingShader.SetFloat3("lightPos", lightPos.x, lightPos.y, lightPos.z);
-	lightingShader.SetFloat3("viewPos", cam->cameraPos.x, cam->cameraPos.y, cam->cameraPos.z);
+	lightingShader.SetFloat3("viewPos", cam->cameraPos.x, cam->cameraPos.y, cam->cameraPos.z);	// Camera position
+	lightingShader.SetFloat3("light.position", lightPos.x, lightPos.y, lightPos.z);		// Light specular component
+
+	
 
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 
