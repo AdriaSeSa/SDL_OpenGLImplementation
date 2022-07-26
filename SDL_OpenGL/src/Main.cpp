@@ -23,6 +23,7 @@
 
 #include "BaseScene.h"
 #include "LightingScene.h"
+#include "MultipleLightsScene.h"
 
 int screenWidth = 1280;
 int screenHeight = 720;
@@ -98,8 +99,9 @@ int main(int argc, char* argv[])
 
 	BaseScene baseScene;
 	LightingScene lightingScene;
+	MultipleLightsScene multipleLightsScene;
 
-	Scene currentScene = lightingScene;
+	Scene currentScene = multipleLightsScene;
 
 
 	input = InputManager::GetInstance();
@@ -139,7 +141,7 @@ int main(int argc, char* argv[])
 		cam->UpdateCamera();
 		SDL_WarpMouseInWindow(window, screenWidth / 2, screenHeight / 2);
 
-		lightingScene.Update();
+		multipleLightsScene.Update();
 
 		ProcessInput();
 		
