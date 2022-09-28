@@ -143,7 +143,7 @@ int main(int argc, char* argv[])
 		cam->UpdateCamera();
 		SDL_WarpMouseInWindow(window, screenWidth / 2, screenHeight / 2);
 
-		modelLoadingScene.Update();
+		baseScene.Update();
 
 		ProcessInput();
 		
